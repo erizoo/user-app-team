@@ -11,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class EmailServiceImpl implements EmailService {
@@ -51,6 +53,11 @@ public class EmailServiceImpl implements EmailService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public List<Email> getAllInformationForEmails() {
+        return emailDao.loadAll();
     }
 
 }
