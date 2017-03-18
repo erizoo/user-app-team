@@ -2,6 +2,7 @@ package by.javateam.dao.Impl;
 
 import by.javateam.dao.SocialDao;
 import by.javateam.model.FacebookUser;
+import by.javateam.model.InstagramUser;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,11 @@ public class SocialDaoImpl implements SocialDao {
     @Override
     public void saveFacebookUser(FacebookUser facebookUser) {
         sessionFactory.getCurrentSession().saveOrUpdate(facebookUser);
+    }
+
+    @Override
+    public void saveInstagramUser(InstagramUser instagramUser) {
+        sessionFactory.getCurrentSession().save(instagramUser);
     }
 
 }
