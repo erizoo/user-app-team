@@ -12,5 +12,5 @@ public interface SocialDao {
      *
      * @param facebookUser object to save
      */
-    void saveUser(FacebookUser facebookUser);
+    void saveFacebookUser(FacebookUser facebookUser);
 }

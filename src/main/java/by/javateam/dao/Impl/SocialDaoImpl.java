@@ -1,7 +1,7 @@
 package by.javateam.dao.Impl;
 
+import by.javateam.dao.SocialDao;
 import by.javateam.model.FacebookUser;
-import by.javateam.service.SocialService;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings("unchecked")
-public class SocialDaoImpl implements SocialService {
+public class SocialDaoImpl implements SocialDao {
 
     private final SessionFactory sessionFactory;
 
@@ -21,7 +21,7 @@ public class SocialDaoImpl implements SocialService {
     }
 
     @Override
-    public void saveUser(FacebookUser facebookUser) {
+    public void saveFacebookUser(FacebookUser facebookUser) {
         sessionFactory.getCurrentSession().saveOrUpdate(facebookUser);
     }
 

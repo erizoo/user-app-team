@@ -10,5 +10,5 @@ public interface SocialService {
     /**
      * Save information about user Facebook.
      */
-    void saveUser(FacebookUser facebookUser);
+    void saveFacebookUser(FacebookUser facebookUser);
 }

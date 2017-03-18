@@ -19,8 +19,8 @@ public class SocialServiceImpl implements SocialService{
     }
 
     @Override
-    public void saveUser(FacebookUser facebookUser) {
-        socialDao.saveUser(facebookUser);
+    public void saveFacebookUser(FacebookUser facebookUser) {
+        socialDao.saveFacebookUser(facebookUser);
     }
 
 }
