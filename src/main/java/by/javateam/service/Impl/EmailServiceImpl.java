@@ -22,17 +22,11 @@ public class EmailServiceImpl implements EmailService {
     private Environment environment;
 
     @Autowired
-    public EmailServiceImpl(EmailDao emailDao) {
+    public EmailServiceImpl(final EmailDao emailDao,
+                            final JavaMailSender mailSender,
+                            final Environment environment) {
         this.emailDao = emailDao;
-    }
-
-    @Autowired
-    public void setMailSender(final JavaMailSender mailSender) {
         this.mailSender = mailSender;
-    }
-
-    @Autowired
-    public void setEnvironment(final Environment environment) {
         this.environment = environment;
     }
 

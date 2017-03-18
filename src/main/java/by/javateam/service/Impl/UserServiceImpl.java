@@ -1,7 +1,6 @@
 package by.javateam.service.Impl;
 
 
-import by.javateam.StringSplit;
 import by.javateam.dao.UserDao;
 import by.javateam.model.User;
 import by.javateam.service.UserService;

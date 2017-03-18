@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Created by valera.
  */
 @Entity
-@Table(name = "facebook")
+@Table(name = "facebook", schema = "test")
 public class FacebookUser {
 
     @Id

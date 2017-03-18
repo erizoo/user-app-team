@@ -1,7 +1,6 @@
 package by.javateam.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mail")

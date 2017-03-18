@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({"by.javateam"})
+@ComponentScan({"by.javateam.*"})
 @PropertySource({"classpath:views.properties"})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
