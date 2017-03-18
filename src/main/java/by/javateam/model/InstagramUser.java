@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "instagram")
-public class InstagramInfoUser {
+public class InstagramUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,10 +13,10 @@ public class InstagramInfoUser {
     @Column(name = "FULL_NAME")
     private String fullName;
 
-    public InstagramInfoUser() {
+    public InstagramUser() {
     }
 
-    public InstagramInfoUser(String fullName) {
+    public InstagramUser(String fullName) {
         this.fullName = fullName;
     }
 
