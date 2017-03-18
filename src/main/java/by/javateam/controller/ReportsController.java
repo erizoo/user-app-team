@@ -1,73 +1,55 @@
 package by.javateam.controller;
 
-import org.apache.log4j.Logger;
+import by.javateam.model.Email;
+import by.javateam.model.User;
+import by.javateam.service.EmailService;
+import by.javateam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import java.util.ArrayList;
 
-
-/**
- * Created by valera on 28.2.17.
- *
- * Controller work with reports api
- */
 @Controller
-@RequestMapping("/api/reports")
+@RequestMapping("/reports")
 public class ReportsController {
 
-    /**
-     * User data access object
-     */
-    private UserDao userDao;
-    /**
-     * Feedback data access object
-     */
-    private FeedbackDao feedbackDao;
+    private UserService userService;
+    private EmailService emailService;
 
-    /**
-     * Constructor set user and feedback dao implementations
-     * @param userDao User DAO implementation
-     * @param feedbackDao Feedback DAO implementation
-     */
     @Autowired
-    public ReportsController(final UserDaoImplementation userDao, final FeedbackDaoImplementation feedbackDao) {
-        this.userDao = userDao;
-        this.feedbackDao = feedbackDao;
+    public ReportsController(final UserService userService, final EmailService emailService) {
+        this.userService = userService;
+        this.emailService = emailService;
     }
 
-    /**
-     * Return all available types of reports
-     * @return Map
-     */
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public final ResponseEntity<List<Report>> getAllReports() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("MyResponseHeader", "MyValue");
-        // todo HARDCODE!!!
-        List<Report> reports = new ArrayList<Report>();
-        reports.add(new Report("Generate and download table with users.", "users", "Users"));
-        reports.add(new Report("Generate and download table with feedback.", "feedback", "Feedback"));
-        return new ResponseEntity<List<Report>>(reports, responseHeaders, HttpStatus.OK);
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public ModelAndView downloadPdf() {
+        User user = new User();
+        java.util.List<User> listBooks = new ArrayList<User>();
+        for(User row : userService.getNames()){
+            user.setFirstName(row.getFirstName());
+            user.setLastName(row.getLastName());
+            listBooks.add(new User(row.getFirstName(), row.getLastName()));
+        }
+        return new ModelAndView("pdfView", "listBooks", listBooks);
     }
 
-    @GetMapping("/users")
-    public ModelAndView getUserList() throws Exception {
-        List<?> users = userDao.getUsers();
 
-        return new ModelAndView("userPdfView", "users", users);
+    @RequestMapping(value = "/feedback", method = RequestMethod.GET)
+    public ModelAndView downloadPdfOfEmails() {
+        Email email = new Email();
+        java.util.List<Email> listEmails = new ArrayList<Email>();
+        for(Email row : emailService.getAllInformationForEmails()){
+            email.setBody(row.getBody());
+            email.setFrom(row.getFrom());
+            email.setSubject(row.getSubject());
+            email.setCreatedTimestamp(row.getCreatedTimestamp());
+            listEmails.add(new Email(row.getBody(), row.getFrom(), row.getSubject(), row.getCreatedTimestamp()));
+        }
+            return new ModelAndView("pdfViewEmails", "listEmails", listEmails);
     }
 
-    @GetMapping("/feedback")
-    public ModelAndView getFeedbackList() throws Exception {
-        List<Feedback> feedbacks = feedbackDao.getAllFeedbacks();
-
-        return new ModelAndView("feedbackPdfView", "feedbacks", feedbacks);
-    }
 }

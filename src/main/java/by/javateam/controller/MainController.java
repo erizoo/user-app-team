@@ -1,7 +1,6 @@
 package by.javateam.controller;
 
-import com.valery.exception.NoCurrentUserException;
-import org.apache.log4j.Logger;
+import by.javateam.exception.NoCurrentUserException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +26,7 @@ public class MainController {
     private static final String CURRENT_USER_FACEBOOK = "currentUserFacebook";
     private static final String CURRENT_USER_INSTAGRAM = "currentUserInstagram";
 
-    @GetMapping(value = "/current-user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/api/current-user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     List<Map<String, String>> getCurrentUser(final HttpServletRequest request) {
         HttpSession currentSession = request.getSession();

@@ -1,9 +1,9 @@
 package by.javateam.controller;
 
 
-import by.boiko.snet.exception.ResourceNotFoundExceptionForGetUserId;
-import by.boiko.snet.model.User;
-import by.boiko.snet.service.UserService;
+import by.javateam.exception.ResourceNotFoundExceptionForGetUserId;
+import by.javateam.model.User;
+import by.javateam.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +19,12 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    @Autowired
     private UserService userService;
+
+    @Autowired
+    public UserController( final UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Returns list of all users.
