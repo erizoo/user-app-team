@@ -1,0 +1,565 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "User-app API",
+        "description": "Move your app forward with the User-app API",
+        "version": "1.0.0"
+    },
+    "host": "valera-user-app.herokuapp.com",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/api",
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Return list with users.",
+                "description": "The Users endpoint returns list with information about the *User-app* users.\nThe response includes the user information without timestamps.\n",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit users count",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "description": "offset",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "inc",
+                        "in": "query",
+                        "description": "Determines which fields will be in the object",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "exc",
+                        "in": "query",
+                        "description": "Determines which fields will not be in the object",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of usres",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create user in database",
+                "description": "",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "User object that needs to be added to the database",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/UserForPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Created user.",
+                        "schema": {
+                            "$ref": "#/definitions/UserWithTimestamps"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Return user with full info.",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unique user id.",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User with full info.",
+                        "schema": {
+                            "$ref": "#/definitions/UserWithTimestamps"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Modify user with full info.",
+                "description": "",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unique user id.",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "User object that needs to be added to the database",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User with full info.",
+                        "schema": {
+                            "$ref": "#/definitions/UserWithTimestamps"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error."
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete user by id.",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Unique user id.",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK status."
+                    },
+                    "404": {
+                        "description": "Not found.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/reports": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Get a list of available reports.",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Description of the contents of the report",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Report"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/feedback": {
+            "get": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Get array of feedbacks.",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "JSON array of feedbacks",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Feedback"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Feedback"
+                ],
+                "summary": "Post new feedback.",
+                "description": "",
+                "consumes": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    },
+                    "400": {
+                        "description": "Validation error.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/currentuser": {
+            "get": {
+                "tags": [
+                    "Current User"
+                ],
+                "summary": "Get current user information",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/CurrentUser"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/facebook": {
+            "get": {
+                "tags": [
+                    "Login",
+                    "Facebook"
+                ],
+                "summary": "Login with Facebook.",
+                "description": "User will be rederect to Facebook login page",
+                "responses": {
+                    "200": {
+                        "description": "Facebook login page"
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/login/instagram": {
+            "get": {
+                "tags": [
+                    "Login",
+                    "Instagram"
+                ],
+                "summary": "Login with Instagram.",
+                "description": "User will be rederect to Instagram login page",
+                "responses": {
+                    "200": {
+                        "description": "Instagram login page"
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout/facebook": {
+            "get": {
+                "tags": [
+                    "Logout",
+                    "Facebook"
+                ],
+                "summary": "Logout with Facebook.",
+                "description": "User became anonimus with Facebook in *User-app*. ",
+                "responses": {
+                    "200": {
+                        "description": "Now user logged out from *User-app* with Facebook."
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout/instagram": {
+            "get": {
+                "tags": [
+                    "Logout",
+                    "Instagram"
+                ],
+                "summary": "Logout with Instagram.",
+                "description": "User became anonimus with Instagram in *User-app*. ",
+                "responses": {
+                    "200": {
+                        "description": "Now user logged out from *User-app* with Instagram."
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "CurrentUser": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Users unique identifier."
+                },
+                "firstName": {
+                    "type": "string",
+                    "description": "Users first name."
+                },
+                "lastName": {
+                    "type": "string",
+                    "description": "Users last name."
+                },
+                "age": {
+                    "type": "integer",
+                    "description": "Users age."
+                },
+                "sex": {
+                    "type": "string",
+                    "description": "Users sex."
+                },
+                "city": {
+                    "type": "string",
+                    "description": "Users city name."
+                },
+                "income": {
+                    "type": "integer",
+                    "description": "Users income."
+                }
+            }
+        },
+        "UserForPost": {
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string",
+                    "description": "Users first name."
+                },
+                "lastName": {
+                    "type": "string",
+                    "description": "Users last name."
+                },
+                "age": {
+                    "type": "integer",
+                    "description": "Users age."
+                },
+                "sex": {
+                    "type": "string",
+                    "description": "Users sex."
+                },
+                "city": {
+                    "type": "string",
+                    "description": "Users city name."
+                },
+                "income": {
+                    "type": "integer",
+                    "description": "Users income."
+                }
+            }
+        },
+        "UserWithTimestamps": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Users unique identifier."
+                },
+                "firstName": {
+                    "type": "string",
+                    "description": "Users first name."
+                },
+                "lastName": {
+                    "type": "string",
+                    "description": "Users last name."
+                },
+                "age": {
+                    "type": "integer",
+                    "description": "Users age."
+                },
+                "sex": {
+                    "type": "string",
+                    "description": "Users sex."
+                },
+                "city": {
+                    "type": "string",
+                    "description": "Users city name."
+                },
+                "income": {
+                    "type": "integer",
+                    "description": "Users income."
+                },
+                "createdTimestamp": {
+                    "type": "string",
+                    "description": "Date of user creating"
+                },
+                "modifiedTimestamp": {
+                    "type": "string",
+                    "description": "Date of user modificitaion"
+                }
+            }
+        },
+        "Report": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": "Description of the contents of the report."
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Reports type."
+                },
+                "label": {
+                    "type": "string"
+                }
+            }
+        },
+        "Feedback": {
+            "type": "object",
+            "properties": {
+                "from": {
+                    "type": "string",
+                    "description": "Email address of responder."
+                },
+                "subject": {
+                    "type": "string",
+                    "description": "Subject of feedback."
+                },
+                "body": {
+                    "type": "string",
+                    "description": "Text of feedback."
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
