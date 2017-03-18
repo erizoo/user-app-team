@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 
 @Controller
-@RequestMapping("/reports")
+@RequestMapping("/api/reports")
 public class ReportsController {
 
     private UserService userService;

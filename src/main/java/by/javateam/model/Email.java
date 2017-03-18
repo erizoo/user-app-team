@@ -22,12 +22,12 @@ public class Email {
     private String from;
 
     @Column(name = "TIME_EMAIL")
-    private LocalDateTime createdTimestamp; // todo refactor to String
+    private String createdTimestamp;
 
     public Email() {
     }
 
-    public Email(String subject, String body, String from, LocalDateTime createdTimestamp) {
+    public Email(String subject, String body, String from, String createdTimestamp) {
         this.subject = subject;
         this.body = body;
         this.from = from;
@@ -66,11 +66,11 @@ public class Email {
         this.from = from;
     }
 
-    public LocalDateTime getCreatedTimestamp() {
+    public String getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public void setCreatedTimestamp(LocalDateTime createdTimestamp) {
+    public void setCreatedTimestamp(String createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 

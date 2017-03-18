@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/api")
 public class SocialController {
 
     private Environment environment;

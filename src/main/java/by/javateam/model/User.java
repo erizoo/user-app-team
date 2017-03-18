@@ -45,7 +45,7 @@ public class User {
     private int income;
 
     @Column(name = "TIME_CREATE_USER")
-    private LocalDateTime createdTimestamp;
+    private LocalDateTime createdTimestamp; //TODO change to string
 
     @Column(name = "TIME_UPDATE_USER")
     private LocalDateTime modifiedTimestamp;

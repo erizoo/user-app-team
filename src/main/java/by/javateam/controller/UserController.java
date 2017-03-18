@@ -17,6 +17,7 @@ import java.util.List;
  */
 
 @Controller
+@RequestMapping("/api")
 public class UserController {
 
     private UserService userService;
