@@ -28,9 +28,9 @@
     <c:url value="/api/login/facebook" var="loginFacebook"/>
     <c:url value="/api/login/instagram" var="loginInstagram"/>
     <form action="${loginUrl}" method="post">
-        <center><h2 class="form-signin-heading">Java Team</h2></center>
-        <input type="text" class="form-control" name="j_username" placeholder="Логин"><br>
-        <input type="password" class="form-control" name="j_password" placeholder="Пароль"><br>
+        <div style="text-align: center;"><h2 class="form-signin-heading">Java Team</h2></div>
+        <input type="text" class="form-control" name="j_username" placeholder="Login" required = required><br>
+        <input type="password" class="form-control" name="j_password" placeholder="Password" required = required><br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Go!</button>
     </form>
     <form action="${loginFacebook}" method="get"><br>

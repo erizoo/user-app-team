@@ -34,6 +34,11 @@ public class MainController {
         return "login";
     }
 
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String errorPage(){
+        return "error";
+    }
+
     @GetMapping(value = "/api/current-user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     List<Map<String, String>> getCurrentUser(final HttpServletRequest request) {
