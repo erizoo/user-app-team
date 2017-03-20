@@ -3,7 +3,7 @@ package by.javateam.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "instagram", schema = "test")
+@Table(name = "instagram")
 public class InstagramUser {
 
     @Id

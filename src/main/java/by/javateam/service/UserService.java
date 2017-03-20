@@ -3,7 +3,6 @@ package by.javateam.service;
 import by.javateam.model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -26,7 +25,7 @@ public interface UserService {
      * @param id identifier of a user
      * @return a user
      */
-    User getUserBuId(int id);
+    User getUserById(int id);
 
     /**
      * Deletes a user by id.
@@ -69,7 +68,7 @@ public interface UserService {
      * @param id identifier of a user
      * @return creation date a user
      */
-    LocalDateTime getCreatedDate(int id);
+    String getCreatedDate(int id);
 
     /**
      * Get a recording with params.

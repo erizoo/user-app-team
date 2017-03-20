@@ -2,7 +2,6 @@ package by.javateam.dao;
 
 import by.javateam.model.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -61,7 +60,7 @@ public interface UserDao {
      * @param id identifier of a user
      * @return creation date a user
      */
-    LocalDateTime getCreatedDate(int id);
+    String getCreatedDate(int id);
 
     /**
      * Load list the names and surnames of users.
