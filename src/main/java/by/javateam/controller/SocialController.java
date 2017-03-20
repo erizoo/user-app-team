@@ -3,6 +3,10 @@ package by.javateam.controller;
 import by.javateam.model.FacebookUser;
 import by.javateam.model.InstagramUser;
 import by.javateam.service.SocialService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monitorjbl.json.JsonView;
+import com.monitorjbl.json.JsonViewModule;
 import org.jinstagram.Instagram;
 import org.jinstagram.auth.InstagramAuthService;
 import org.jinstagram.auth.model.Token;
@@ -33,6 +37,8 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.monitorjbl.json.Match.match;
+
 @Controller
 @RequestMapping("/api")
 public class SocialController {
@@ -53,9 +59,9 @@ public class SocialController {
         this.socialService = socialService;
     }
 
-    private final static String CLIENT_ID = "0e37d7d0c3534a14a6d8448cdf5cef71";
-    private final static String CLIENT_ID_SECRET = "629b16ba96a44b8db7ad34bbb54344aa";
-    private final static String REDIRECT_URI = "http://snet2.herokuapp.com/callback";
+    private final static String CLIENT_ID_FOR_INSTAGRAM = "0e37d7d0c3534a14a6d8448cdf5cef71";
+    private final static String CLIENT_ID_SECRET_FOR_INSTAGRAM = "629b16ba96a44b8db7ad34bbb54344aa";
+    private final static String REDIRECT_URI = "http://user-app-team.heroku.com/api/callback/instagram";
     private final static String FACEBOOK = "facebook";
     private final static String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
     private final static String CURRENT_USER_FACEBOOK = "currentUserFacebook";
@@ -77,7 +83,7 @@ public class SocialController {
         String redirectUri = "redirect_uri=";
         String code = "response_type=code";
         String authorizeUrl = uri +
-                clientId + CLIENT_ID +
+                clientId + CLIENT_ID_FOR_INSTAGRAM +
                 "&" +
                 redirectUri + REDIRECT_URI +
                 "&" +
@@ -146,23 +152,27 @@ public class SocialController {
      * save user in database, //todo add this!
      * add user in session,
      * @param code Instagram access code
-     * @return
+     * @return instagramUser
      * @throws InstagramException
      */
     @RequestMapping(value = "/callback/instagram", method = RequestMethod.GET)
     @ResponseBody
-    public String callbackInstagram(@RequestParam("code") final String code, final HttpServletRequest request) throws InstagramException {
-        InstagramService service = new InstagramAuthService().apiKey(CLIENT_ID).apiSecret(CLIENT_ID_SECRET).callback(REDIRECT_URI).build();
+    public String callbackInstagram(@RequestParam("code") final String code, final HttpServletRequest request) throws InstagramException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper().registerModule(new JsonViewModule());
+        InstagramService service = new InstagramAuthService().apiKey(CLIENT_ID_FOR_INSTAGRAM).apiSecret(CLIENT_ID_SECRET_FOR_INSTAGRAM).callback(REDIRECT_URI).build();
         Verifier verifier = new Verifier(code);
         Token accessToken = service.getAccessToken(verifier);
         Instagram instagram = new Instagram(accessToken);
         UserInfo userInfo = instagram.getCurrentUserInfo();
         InstagramUser instagramUser = new InstagramUser();
-        instagramUser.setId(Long.parseLong(userInfo.getData().getId()));
+        instagramUser.setIdInstagram(String.valueOf(Long.parseLong(userInfo.getData().getId())));
         instagramUser.setFullName(userInfo.getData().getFullName());
+        instagramUser.setNickName(userInfo.getData().getUsername());
         socialService.saveInstagramUser(instagramUser);
         request.getSession().setAttribute(CURRENT_USER_INSTAGRAM, instagramUser);
-        return "redirect: /";
+        return mapper.writeValueAsString(JsonView.with(instagramUser)
+                .onClass(by.javateam.model.InstagramUser.class, match()
+                        .include("*")));
     }
 
     /**
