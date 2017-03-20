@@ -5,7 +5,6 @@ import by.javateam.model.InstagramUser;
 import by.javateam.service.SocialService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.monitorjbl.json.JsonView;
 import com.monitorjbl.json.JsonViewModule;
 import org.jinstagram.Instagram;
 import org.jinstagram.auth.InstagramAuthService;
@@ -37,17 +36,21 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.monitorjbl.json.Match.match;
-
 @Controller
 @RequestMapping("/api")
 public class SocialController {
 
+    private final static String CLIENT_ID_FOR_INSTAGRAM = "0e37d7d0c3534a14a6d8448cdf5cef71";
+    private final static String CLIENT_ID_SECRET_FOR_INSTAGRAM = "629b16ba96a44b8db7ad34bbb54344aa";
+    private final static String REDIRECT_URI = "http://user-app-team.heroku.com/api/callback/instagram";
+    private final static String FACEBOOK = "facebook";
+    private final static String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
+    private final static String CURRENT_USER_FACEBOOK = "currentUserFacebook";
+    private final static String CURRENT_USER_INSTAGRAM = "currentUserInstagram";
     private Environment environment;
     private ConnectionFactoryRegistry connectionFactoryRegistry;
     private OAuth2Parameters oAuth2Parameters;
     private SocialService socialService;
-
     @Autowired
     public SocialController(final Environment environment,
                             final ConnectionFactoryRegistry connectionFactoryRegistry,
@@ -59,14 +62,6 @@ public class SocialController {
         this.socialService = socialService;
     }
 
-    private final static String CLIENT_ID_FOR_INSTAGRAM = "0e37d7d0c3534a14a6d8448cdf5cef71";
-    private final static String CLIENT_ID_SECRET_FOR_INSTAGRAM = "629b16ba96a44b8db7ad34bbb54344aa";
-    private final static String REDIRECT_URI = "http://user-app-team.heroku.com/api/callback/instagram";
-    private final static String FACEBOOK = "facebook";
-    private final static String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
-    private final static String CURRENT_USER_FACEBOOK = "currentUserFacebook";
-    private final static String CURRENT_USER_INSTAGRAM = "currentUserInstagram";
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
         return "login";
@@ -74,6 +69,7 @@ public class SocialController {
 
     /**
      * Starts Instagram login flow
+     *
      * @return redirect to Instagram login page
      */
     @RequestMapping(value = "/login/instagram", method = RequestMethod.GET)
@@ -93,8 +89,10 @@ public class SocialController {
 
         return new ModelAndView(redirectView);
     }
+
     /**
      * Starts Facebook login flow
+     *
      * @return redirect to Facebook login page
      */
     @RequestMapping(value = "/login/facebook", method = RequestMethod.GET)
@@ -116,8 +114,9 @@ public class SocialController {
      * save user in database,
      * add user in session,
      * when user logged in with Facebook
-     * @param code Facebook authorization code
-     * @param state application state for security
+     *
+     * @param code    Facebook authorization code
+     * @param state   application state for security
      * @param request HttpServletRequest
      * @return redirect to main page
      * @throws Exception
@@ -151,6 +150,7 @@ public class SocialController {
      * Exchange Facebook code for Token,
      * save user in database, //todo add this!
      * add user in session,
+     *
      * @param code Instagram access code
      * @return instagramUser
      * @throws InstagramException
@@ -170,15 +170,14 @@ public class SocialController {
         instagramUser.setNickName(userInfo.getData().getUsername());
         socialService.saveInstagramUser(instagramUser);
         request.getSession().setAttribute(CURRENT_USER_INSTAGRAM, instagramUser);
-        return mapper.writeValueAsString(JsonView.with(instagramUser)
-                .onClass(by.javateam.model.InstagramUser.class, match()
-                        .include("*")));
+        return "/";
     }
 
     /**
      * Social login error handler
+     *
      * @param errorReason reason
-     * @param error error
+     * @param error       error
      * @param description description
      * @return reason + error + description
      */
@@ -189,11 +188,14 @@ public class SocialController {
                                           @RequestParam("error_description") final String description) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        return new ResponseEntity<Map>(new HashMap(){{put("message", error + ". " + errorReason + " " + description);}}, headers, HttpStatus.I_AM_A_TEAPOT);
+        return new ResponseEntity<Map>(new HashMap() {{
+            put("message", error + ". " + errorReason + " " + description);
+        }}, headers, HttpStatus.I_AM_A_TEAPOT);
     }
 
     /**
      * Logout from application
+     *
      * @param request request
      * @return redirect to main page
      */

@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>S-net</title>
+    <title>Java Team</title>
 
     <!-- Bootstrap core CSS -->
     <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
@@ -24,16 +24,20 @@
 <body>
 
 <div class="container" style="width: 300px;">
-    <c:url value="/j_spring_security_check" var="loginUrl" />
+    <c:url value="/j_spring_security_check" var="loginUrl"/>
+    <c:url value="/api/login/facebook" var="loginFacebook"/>
+    <c:url value="/api/login/instagram" var="loginInstagram"/>
     <form action="${loginUrl}" method="post">
-        <center><h2 class="form-signin-heading">S-net</h2></center>
+        <center><h2 class="form-signin-heading">Java Team</h2></center>
         <input type="text" class="form-control" name="j_username" placeholder="Логин"><br>
         <input type="password" class="form-control" name="j_password" placeholder="Пароль"><br>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button></form>
-        <c:url value="/current" var="loginUrl" />
-        <form action="${loginUrl}" method="post"><br>
-            <button class="btn btn-social btn-twitter" type="submit">Sign in with Twitter</button>
-
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Go!</button>
+    </form>
+    <form action="${loginFacebook}" method="get"><br>
+        <button class="btn btn-social btn-facebook" type="submit">Sign in with Facebook</button>
+    </form>
+    <form action="${loginInstagram}" method="get"><br>
+        <button class="btn btn-social btn-instagram" type="submit">Sign in with Instagram</button>
     </form>
 
 </div>
