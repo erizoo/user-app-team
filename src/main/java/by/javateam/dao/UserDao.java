@@ -46,7 +46,7 @@ public interface UserDao {
      *
      * @param user model user
      */
-    void update(User user);
+    User update(User user);
 
     /**
      * Loads list of all users from storage.

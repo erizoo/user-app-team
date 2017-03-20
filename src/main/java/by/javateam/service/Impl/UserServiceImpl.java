@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAllForId(int id) {
+    public User getUserBuId(int id) {
         return userDao.loadAllUsersForId(id);
     }
 
@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
-        userDao.update(user);
+    public User update(User user) {
+        return userDao.update(user);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getAllWithParams(Integer offset, Integer limit, String exc, String inc) throws JsonProcessingException {
+    public String getAllUsersWithParams(Integer offset, Integer limit, String exc, String inc) throws JsonProcessingException {
         StringSplit stringSplit = new StringSplit();
         List<User> userList = userDao.loadAllWithOffsetAndLimit(offset, limit);
         ObjectMapper mapper = new ObjectMapper().registerModule(new JsonViewModule());

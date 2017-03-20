@@ -26,7 +26,7 @@ public interface UserService {
      * @param id identifier of a user
      * @return a user
      */
-    User getAllForId(int id);
+    User getUserBuId(int id);
 
     /**
      * Deletes a user by id.
@@ -47,7 +47,7 @@ public interface UserService {
      *
      * @param user user object to update
      */
-    void update(User user);
+    User update(User user);
 
     /**
      * Get list of all users.
@@ -80,5 +80,5 @@ public interface UserService {
      * @param inc    params
      * @return list users
      */
-    String getAllWithParams(Integer offset, Integer limit, String exc, String inc) throws JsonProcessingException;
+    String getAllUsersWithParams(Integer offset, Integer limit, String exc, String inc) throws JsonProcessingException;
 }
