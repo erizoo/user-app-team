@@ -27,10 +27,12 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = {"classpath:hibernate.properties",
-                         "classpath:data-base.properties",
-                         "classpath:email.properties"})
+        "classpath:data-base.properties",
+        "classpath:email.properties",
+        "classpath:social.properties"})
 @ComponentScan(basePackageClasses = {User.class})
 public class ApplicationConfig {
+
 
     private Environment environment;
 
@@ -65,6 +67,7 @@ public class ApplicationConfig {
         String dbUrl = "jdbc:mysql://" + path;
 
         BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
         basicDataSource.setUrl(dbUrl);
         basicDataSource.setUsername(username);
         basicDataSource.setPassword(password);

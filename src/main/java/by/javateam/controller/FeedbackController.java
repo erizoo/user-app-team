@@ -1,10 +1,8 @@
 package by.javateam.controller;
 
-import com.valery.dao.feedback.FeedbackDao;
-import com.valery.dao.feedback.FeedbackDaoImplementation;
-import com.valery.model.ExceptionJsonInfo;
-import com.valery.model.feedback.Feedback;
-import com.valery.service.email.MailService;
+import by.javateam.exception.ValidationException;
+import by.javateam.model.Email;
+import by.javateam.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
@@ -13,58 +11,55 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import javax.validation.ValidationException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * Created by valera on 2.3.17.
+ * Created by valera.
  */
-@Controller
+@RestController
 @RequestMapping("/api")
 public class FeedbackController {
 
-    private MailService mailService;
-    private FeedbackDao feedbackDao;
+
+    private EmailService emailService;
 
     @Autowired
-    public FeedbackController(final MailService mailService, final FeedbackDao feedbackDao) {
-        this.mailService = mailService;
-        this.feedbackDao = feedbackDao;
+    public FeedbackController(final EmailService emailService) {
+        this.emailService = emailService;
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping(value = "/feedback", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void sendFeedback(final @Valid @RequestBody Feedback feedback, final BindingResult result) {
+    @RequestMapping(value = "/feedback", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public void sendFeedback(final @Valid @RequestBody Email email, final BindingResult result) {
         if (result.hasErrors()) {
-            throw new ValidationException(preparingValidationMessage(result));
+            throw new ValidationException(result.getAllErrors());
         }
-        mailService.sendEmail(feedback);
-        feedbackDao.createFeedback(feedback);
+        emailService.sendEmail(email);
+        emailService.saveEmails(email);
     }
 
-    @GetMapping(value = "/feedback", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody List<Feedback> getAllFeedbacks() {
-        return feedbackDao.getAllFeedbacks();
+    @RequestMapping(value = "/feedback", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<Email> getAllFeedbacks() {
+        return emailService.getAllInformationForEmails();
     }
 
     @ExceptionHandler(ValidationException.class)
-    public HttpEntity<?> validationError(final Exception ex) {
-        HttpHeaders headers = new HttpHeaders();
-        ExceptionJsonInfo info = new ExceptionJsonInfo();
-        info.setMessage(ex.getMessage());
-        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        return new ResponseEntity<ExceptionJsonInfo>(info, headers, HttpStatus.NOT_FOUND);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String validationError(final ValidationException ex) {
+        StringBuilder builder = new StringBuilder();
+        for (ObjectError error: ex.getErrors()) {
+            FieldError fieldError = (FieldError) error;
+            builder.append("Field ").
+                    append(fieldError.getField()).
+                    append(" ").
+                    append(fieldError.getDefaultMessage()).
+                    append("; ");
+        }
+        return builder.toString();
     }
 
-    private String preparingValidationMessage(final BindingResult result) {
-        List<ObjectError> errors = result.getAllErrors();
-        StringBuilder message = new StringBuilder("This field(s) is(are) wrong : ");
-        for (ObjectError error: errors) {
-            FieldError fe = (FieldError) error;
-            message.append(fe.getField());
-            message.append(" ");
-        }
-        return message.toString();
-    }
 }

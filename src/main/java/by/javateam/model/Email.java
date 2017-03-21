@@ -1,7 +1,8 @@
 package by.javateam.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "mail")
@@ -9,25 +10,29 @@ public class Email {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @NotEmpty
     @Column(name = "SUBJECT_EMAIL")
     private String subject;
 
+    @NotEmpty
     @Column(name = "BODY_EMAIL")
     private String body;
 
+    @org.hibernate.validator.constraints.Email
+    @NotEmpty
     @Column(name = "FROM_EMAIL")
     private String from;
 
     @Column(name = "TIME_EMAIL")
-    private LocalDateTime createdTimestamp; // todo refactor to String
+    private String createdTimestamp;
 
     public Email() {
     }
 
-    public Email(String subject, String body, String from, LocalDateTime createdTimestamp) {
+    public Email(String subject, String body, String from, String createdTimestamp) {
         this.subject = subject;
         this.body = body;
         this.from = from;
@@ -66,11 +71,11 @@ public class Email {
         this.from = from;
     }
 
-    public LocalDateTime getCreatedTimestamp() {
+    public String getCreatedTimestamp() {
         return createdTimestamp;
     }
 
-    public void setCreatedTimestamp(LocalDateTime createdTimestamp) {
+    public void setCreatedTimestamp(String createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
     }
 

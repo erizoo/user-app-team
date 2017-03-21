@@ -1,15 +1,12 @@
 package by.javateam.controller;
 
-import com.valery.exception.NoCurrentUserException;
-import org.apache.log4j.Logger;
+import by.javateam.exception.NoCurrentUserException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,7 +24,22 @@ public class MainController {
     private static final String CURRENT_USER_FACEBOOK = "currentUserFacebook";
     private static final String CURRENT_USER_INSTAGRAM = "currentUserInstagram";
 
-    @GetMapping(value = "/current-user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    /**
+     * Load start page.
+     *
+     * @return login jsp page
+     */
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String startPage(){
+        return "index";
+    }
+
+    @RequestMapping(value = "/error", method = RequestMethod.GET)
+    public String errorPage(){
+        return "error";
+    }
+
+    @GetMapping(value = "/api/current-user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     List<Map<String, String>> getCurrentUser(final HttpServletRequest request) {
         HttpSession currentSession = request.getSession();
@@ -42,15 +54,6 @@ public class MainController {
             throw new NoCurrentUserException();
         }
         return currentUser;
-    }
-
-    /**
-     * Index jsp
-     * @return string with jsp name
-     */
-    @GetMapping("/")
-    public final String index() {
-        return "index";
     }
 
     /**
