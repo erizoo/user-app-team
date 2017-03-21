@@ -1,5 +1,7 @@
 package by.javateam.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,15 +10,19 @@ public class Email {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @NotEmpty
     @Column(name = "SUBJECT_EMAIL")
     private String subject;
 
+    @NotEmpty
     @Column(name = "BODY_EMAIL")
     private String body;
 
+    @org.hibernate.validator.constraints.Email
+    @NotEmpty
     @Column(name = "FROM_EMAIL")
     private String from;
 

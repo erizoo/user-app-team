@@ -42,7 +42,7 @@ public class SocialController {
 
     private final static String CLIENT_ID_FOR_INSTAGRAM = "0e37d7d0c3534a14a6d8448cdf5cef71";
     private final static String CLIENT_ID_SECRET_FOR_INSTAGRAM = "629b16ba96a44b8db7ad34bbb54344aa";
-    private final static String REDIRECT_URI = "http://user-app-team.heroku.com/api/callback/instagram";
+    private final static String REDIRECT_URI = "https://user-app-team.herokuapp.com/api/callback/instagram";
     private final static String FACEBOOK = "facebook";
     private final static String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
     private final static String CURRENT_USER_FACEBOOK = "currentUserFacebook";
