@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by User on 01.03.2017.
+ * Created by valera.
  */
 @Component
 public class UserPdfList extends AbstractPdfView {
@@ -26,7 +26,7 @@ public class UserPdfList extends AbstractPdfView {
     @SuppressWarnings("unchecked")
     protected void buildPdfDocument(final Map model, final Document doc, final PdfWriter writer,
                                     final HttpServletRequest req, final HttpServletResponse resp) throws Exception {
-        List<User> users = (List<User>) model.get("users");
+        List<User> users = (List<User>) model.get("listBooks");
         final int documentNameFontSize = 25;
         final int documentDateFontSize = 12;
 
