@@ -11,7 +11,6 @@ public class FacebookUser {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column(name = "FULL_NAME")

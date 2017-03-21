@@ -42,7 +42,7 @@ public class SocialController {
 
     private final static String CLIENT_ID_FOR_INSTAGRAM = "0e37d7d0c3534a14a6d8448cdf5cef71";
     private final static String CLIENT_ID_SECRET_FOR_INSTAGRAM = "629b16ba96a44b8db7ad34bbb54344aa";
-    private final static String REDIRECT_URI = "https://user-app-team.herokuapp.com/api/callback/instagram";
+    private final static String REDIRECT_URI = "http://user-app-team.herokuapp.com/api/callback/instagram";
     private final static String FACEBOOK = "facebook";
     private final static String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
     private final static String CURRENT_USER_FACEBOOK = "currentUserFacebook";
@@ -96,7 +96,7 @@ public class SocialController {
      * @return redirect to Facebook login page
      */
     @RequestMapping(value = "/login/facebook", method = RequestMethod.GET)
-    public ModelAndView loginFacebook() throws Exception {
+    public ModelAndView loginFacebook() {
         FacebookConnectionFactory facebookConnectionFactory = (FacebookConnectionFactory) connectionFactoryRegistry
                 .getConnectionFactory(FACEBOOK);
         OAuth2Operations oauthOperations = facebookConnectionFactory
@@ -125,7 +125,7 @@ public class SocialController {
     public String callbackFromFacebook(
             final @RequestParam("code") String code,
             final @RequestParam("state") String state,
-            final HttpServletRequest request) throws Exception {
+            final HttpServletRequest request) {
 
         FacebookConnectionFactory connectionFactory = (FacebookConnectionFactory) connectionFactoryRegistry
                 .getConnectionFactory(FACEBOOK);
@@ -148,7 +148,7 @@ public class SocialController {
 
     /**
      * Exchange Facebook code for Token,
-     * save user in database, //todo add this!
+     * save user in database,
      * add user in session,
      *
      * @param code Instagram access code
@@ -156,8 +156,9 @@ public class SocialController {
      * @throws InstagramException
      */
     @RequestMapping(value = "/callback/instagram", method = RequestMethod.GET)
-    @ResponseBody
-    public String callbackInstagram(@RequestParam("code") final String code, final HttpServletRequest request) throws InstagramException, JsonProcessingException {
+    public String callbackInstagram(
+            @RequestParam("code") final String code,
+            final HttpServletRequest request) throws InstagramException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper().registerModule(new JsonViewModule());
         InstagramService service = new InstagramAuthService().apiKey(CLIENT_ID_FOR_INSTAGRAM).apiSecret(CLIENT_ID_SECRET_FOR_INSTAGRAM).callback(REDIRECT_URI).build();
         Verifier verifier = new Verifier(code);
@@ -170,7 +171,7 @@ public class SocialController {
         instagramUser.setNickName(userInfo.getData().getUsername());
         socialService.saveInstagramUser(instagramUser);
         request.getSession().setAttribute(CURRENT_USER_INSTAGRAM, instagramUser);
-        return "/";
+        return "redirect: /";
     }
 
     /**
