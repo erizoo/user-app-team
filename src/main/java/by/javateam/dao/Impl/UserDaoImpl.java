@@ -2,7 +2,9 @@ package by.javateam.dao.Impl;
 
 import by.javateam.dao.UserDao;
 import by.javateam.model.User;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +64,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> loadNames() {
         return sessionFactory.getCurrentSession().createQuery("select firstName , lastName from User").list();
+    }
+
+    @Override
+    public Number countAll() {
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class);
+        criteria.setProjection(Projections.rowCount());
+        return (Number) criteria.uniqueResult();
     }
 
     @Override
