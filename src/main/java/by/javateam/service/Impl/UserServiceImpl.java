@@ -99,4 +99,9 @@ public class UserServiceImpl implements UserService {
                 .onClass(User.class, match().exclude("createdTimestamp", "modifiedTimestamp")));
     }
 
+    @Override
+    public Number countAll() {
+        return userDao.countAll();
+    }
+
 }

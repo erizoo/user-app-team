@@ -1,10 +1,14 @@
 package by.javateam.controller;
 
-
 import by.javateam.exception.ResourceNotFoundExceptionForGetUserId;
 import by.javateam.model.User;
 import by.javateam.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monitorjbl.json.JsonViewModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The controller determines methods for access to User service.
@@ -24,9 +33,11 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    public UserController( final UserService userService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     /**
      * Returns list of all users.
@@ -34,12 +45,16 @@ public class UserController {
      * @return list of users in json
      */
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String getAllUsers(@RequestParam(value = "offset", required = false) Integer offset,
-                              @RequestParam(value = "limit", required = false) Integer limit,
-                              @RequestParam(value = "inc", required = false) String inc,
-                              @RequestParam(value = "exc", required = false) String exc) throws JsonProcessingException {
-
-        return userService.getAllUsersWithParams(offset, limit, exc, inc);
+    public Map getAllUsers(@RequestParam(value = "offset", required = false) Integer offset,
+                           @RequestParam(value = "limit", required = false) Integer limit,
+                           @RequestParam(value = "inc", required = false) String inc,
+                           @RequestParam(value = "exc", required = false) String exc) throws IOException {
+        Map response = new HashMap();
+        String jsonUsers = userService.getAllUsersWithParams(offset, limit, exc, inc);
+        ArrayList users = new ObjectMapper().readValue(jsonUsers, ArrayList.class);
+        response.put("items", users);
+        response.put("countAll", userService.countAll());
+        return response;
     }
 
     /**
@@ -77,13 +92,15 @@ public class UserController {
      * @param userId identifier of a user to delete
      */
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable("userId") int userId) {
+    public Map<String, String> deleteUser(@PathVariable("userId") int userId) {
         if (userService.getUserById(userId) == null) {
             throw new ResourceNotFoundExceptionForGetUserId();
         } else {
             userService.delete(userId);
         }
+        Map<String, String> message = new HashMap<>();
+        message.put("message", "Successfully deleted");
+        return message;
     }
 
     /**

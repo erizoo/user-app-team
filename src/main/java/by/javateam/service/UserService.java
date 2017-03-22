@@ -80,4 +80,6 @@ public interface UserService {
      * @return list users
      */
     String getAllUsersWithParams(Integer offset, Integer limit, String exc, String inc) throws JsonProcessingException;
+
+    Number countAll();
 }
