@@ -68,4 +68,6 @@ public interface UserDao {
      * @return list users
      */
     List<User> loadNames();
+
+    Number countAll();
 }

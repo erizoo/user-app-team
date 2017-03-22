@@ -1,17 +1,24 @@
 package by.javateam.controller;
 
-
 import by.javateam.exception.ResourceNotFoundExceptionForGetUserId;
 import by.javateam.model.User;
 import by.javateam.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The controller determines methods for access to User service.
@@ -24,7 +31,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    public UserController( final UserService userService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
     }
 
@@ -34,12 +41,19 @@ public class UserController {
      * @return list of users in json
      */
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String getAllUsers(@RequestParam(value = "offset", required = false) Integer offset,
-                              @RequestParam(value = "limit", required = false) Integer limit,
-                              @RequestParam(value = "inc", required = false) String inc,
-                              @RequestParam(value = "exc", required = false) String exc) throws JsonProcessingException {
-
-        return userService.getAllUsersWithParams(offset, limit, exc, inc);
+    public List<Map> getAllUsers(@RequestParam(value = "offset", required = false) Integer offset,
+                                  @RequestParam(value = "limit", required = false) Integer limit,
+                                  @RequestParam(value = "inc", required = false) String inc,
+                                  @RequestParam(value = "exc", required = false) String exc) throws JsonProcessingException {
+        Map map = new HashMap();
+        String users = userService.getAllUsersWithParams(offset, limit, exc, inc);
+        map.put("items", users);
+        Map map1 = new HashMap();
+        map1.put("countAll", userService.countAll().toString());
+        List<Map> members = new ArrayList<>();
+        members.add(map);
+        members.add(map1);
+        return members;
     }
 
     /**
@@ -77,13 +91,15 @@ public class UserController {
      * @param userId identifier of a user to delete
      */
     @RequestMapping(value = "/user/{userId}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable("userId") int userId) {
+    public Map<String, String> deleteUser(@PathVariable("userId") int userId) {
         if (userService.getUserById(userId) == null) {
             throw new ResourceNotFoundExceptionForGetUserId();
         } else {
             userService.delete(userId);
         }
+        Map<String, String> message = new HashMap<>();
+        message.put("message", "Successfully deleted");
+        return message;
     }
 
     /**
