@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Number countAll() {
+    public long countAll() {
         return userDao.countAll();
     }
 
