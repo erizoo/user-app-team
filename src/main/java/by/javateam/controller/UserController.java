@@ -4,13 +4,9 @@ import by.javateam.exception.ResourceNotFoundExceptionForGetUserId;
 import by.javateam.model.User;
 import by.javateam.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
