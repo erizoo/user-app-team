@@ -37,19 +37,15 @@ public class UserController {
      * @return list of users in json
      */
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public List<Map> getAllUsers(@RequestParam(value = "offset", required = false) Integer offset,
+    public Map getAllUsers(@RequestParam(value = "offset", required = false) Integer offset,
                                   @RequestParam(value = "limit", required = false) Integer limit,
                                   @RequestParam(value = "inc", required = false) String inc,
                                   @RequestParam(value = "exc", required = false) String exc) throws JsonProcessingException {
         Map map = new HashMap();
         String users = userService.getAllUsersWithParams(offset, limit, exc, inc);
         map.put("items", users);
-        Map map1 = new HashMap();
-        map1.put("countAll", userService.countAll().toString());
-        List<Map> members = new ArrayList<>();
-        members.add(map);
-        members.add(map1);
-        return members;
+        map.put("countAll", userService.countAll().toString());
+        return map;
     }
 
     /**
