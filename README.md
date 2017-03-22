@@ -21,9 +21,21 @@ To start a project use:
 
 project will be available on http://localhost:8080/
 
+## CheckStyle plugin installation
+
+Open `file>Settings>IDE Settings>plugins`. 
+Click Browse repositories…
+Find «Checkstyle-idea» and install plugin.
+
 ## Preview
 
-https://valera-user-app.herokuapp.com/api/users
+#### Back-end
+
+https://team-user-app.herokuapp.com/api
+
+#### Front-end
+
+https://serene-wave-27221.herokuapp.com/#/contacts
 
 ## Specification
 
