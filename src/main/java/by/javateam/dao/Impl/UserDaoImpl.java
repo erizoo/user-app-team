@@ -67,10 +67,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Number countAll() {
-        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(User.class);
-        criteria.setProjection(Projections.rowCount());
-        return (Number) criteria.uniqueResult();
+    public long countAll() {
+        return (long) sessionFactory.getCurrentSession().createQuery("SELECT COUNT(e) FROM User e").getSingleResult();
     }
 
     @Override

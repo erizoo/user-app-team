@@ -69,5 +69,5 @@ public interface UserDao {
      */
     List<User> loadNames();
 
-    Number countAll();
+    long countAll();
 }
