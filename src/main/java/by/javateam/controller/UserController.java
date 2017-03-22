@@ -53,7 +53,7 @@ public class UserController {
         String jsonUsers = userService.getAllUsersWithParams(offset, limit, exc, inc);
         ArrayList users = new ObjectMapper().readValue(jsonUsers, ArrayList.class);
         response.put("items", users);
-        response.put("countAll", limit != null ? limit : userService.countAll());
+        response.put("countAll", userService.countAll());
         return response;
     }
 
