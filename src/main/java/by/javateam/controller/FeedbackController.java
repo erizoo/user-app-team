@@ -52,11 +52,11 @@ public class FeedbackController {
         StringBuilder builder = new StringBuilder();
         for (ObjectError error: ex.getErrors()) {
             FieldError fieldError = (FieldError) error;
-            builder.append("Field ").
-                    append(fieldError.getField()).
-                    append(" ").
-                    append(fieldError.getDefaultMessage()).
-                    append("; ");
+            builder.append("Field ")
+                    .append(fieldError.getField())
+                    .append(" ")
+                    .append(fieldError.getDefaultMessage())
+                    .append("; ");
         }
         return builder.toString();
     }
