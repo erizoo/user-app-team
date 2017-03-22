@@ -4,18 +4,15 @@ import by.javateam.exception.ValidationException;
 import by.javateam.model.Email;
 import by.javateam.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by valera.
@@ -31,6 +28,8 @@ public class FeedbackController {
     public FeedbackController(final EmailService emailService) {
         this.emailService = emailService;
     }
+
+
 
     @ResponseStatus(value = HttpStatus.OK)
     @RequestMapping(value = "/feedback", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
