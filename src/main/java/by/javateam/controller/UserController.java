@@ -4,6 +4,11 @@ import by.javateam.exception.ResourceNotFoundExceptionForGetUserId;
 import by.javateam.model.User;
 import by.javateam.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monitorjbl.json.JsonViewModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +37,8 @@ public class UserController {
         this.userService = userService;
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+
     /**
      * Returns list of all users.
      *
@@ -38,14 +46,15 @@ public class UserController {
      */
     @RequestMapping(value = "/users", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Map getAllUsers(@RequestParam(value = "offset", required = false) Integer offset,
-                                  @RequestParam(value = "limit", required = false) Integer limit,
-                                  @RequestParam(value = "inc", required = false) String inc,
-                                  @RequestParam(value = "exc", required = false) String exc) throws JsonProcessingException {
-        Map map = new HashMap();
-        String users = userService.getAllUsersWithParams(offset, limit, exc, inc);
-        map.put("items", users);
-        map.put("countAll", userService.countAll().toString());
-        return map;
+                           @RequestParam(value = "limit", required = false) Integer limit,
+                           @RequestParam(value = "inc", required = false) String inc,
+                           @RequestParam(value = "exc", required = false) String exc) throws IOException {
+        Map response = new HashMap();
+        String jsonUsers = userService.getAllUsersWithParams(offset, limit, exc, inc);
+        ArrayList users = new ObjectMapper().readValue(jsonUsers, ArrayList.class);
+        response.put("items", users);
+        response.put("countAll", limit != null ? limit : userService.countAll());
+        return response;
     }
 
     /**
