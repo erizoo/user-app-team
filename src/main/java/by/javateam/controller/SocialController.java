@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -101,7 +102,7 @@ public class SocialController {
                 .getConnectionFactory(FACEBOOK);
         OAuth2Operations oauthOperations = facebookConnectionFactory
                 .getOAuthOperations();
-        oAuth2Parameters.setState("user-app-test");
+        oAuth2Parameters.setState("user-app-team");
         String authorizeUrl = oauthOperations.buildAuthorizeUrl(oAuth2Parameters);
         RedirectView redirectView = new RedirectView(authorizeUrl, true, true,
                 true);
@@ -119,10 +120,9 @@ public class SocialController {
      * @param state   application state for security
      * @param request HttpServletRequest
      * @return redirect to main page
-     * @throws Exception
      */
-    @RequestMapping(value = "/callback/facebook", method = RequestMethod.GET)
-    public String callbackFromFacebook(
+    @RequestMapping(value = "/callback/facebook", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ModelAndView callbackFromFacebook(
             final @RequestParam("code") String code,
             final @RequestParam("state") String state,
             final HttpServletRequest request) {
@@ -143,7 +143,8 @@ public class SocialController {
         currentUser.put("id", user.getId());
         currentUser.put("name", user.getName());
         session.setAttribute(CURRENT_USER_FACEBOOK, currentUser);
-        return "redirect: /";
+        RedirectView redirectView = new RedirectView(request.getHeader("referer"), true, true, true);
+        return new ModelAndView(redirectView);
     }
 
     /**
@@ -156,7 +157,7 @@ public class SocialController {
      * @throws InstagramException
      */
     @RequestMapping(value = "/callback/instagram", method = RequestMethod.GET)
-    public String callbackInstagram(
+    public ModelAndView callbackInstagram(
             @RequestParam("code") final String code,
             final HttpServletRequest request) throws InstagramException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper().registerModule(new JsonViewModule());
@@ -171,7 +172,8 @@ public class SocialController {
         instagramUser.setNickName(userInfo.getData().getUsername());
         socialService.saveInstagramUser(instagramUser);
         request.getSession().setAttribute(CURRENT_USER_INSTAGRAM, instagramUser);
-        return "redirect: /";
+        RedirectView redirectView = new RedirectView(request.getHeader("referer"), true, true, true);
+        return new ModelAndView(redirectView);
     }
 
     /**
@@ -189,7 +191,7 @@ public class SocialController {
                                           @RequestParam("error_description") final String description) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
-        return new ResponseEntity<Map>(new HashMap() {{
+        return new ResponseEntity<>(new HashMap() {{
             put("message", error + ". " + errorReason + " " + description);
         }}, headers, HttpStatus.I_AM_A_TEAPOT);
     }
@@ -200,12 +202,13 @@ public class SocialController {
      * @param request request
      * @return redirect to main page
      */
-    @GetMapping("/logout/facebook")
-    public String logoutFacebook(HttpServletRequest request) {
-        if (request.getSession().getAttribute(FACEBOOK_ACCESS_TOKEN) != null) {
+    @GetMapping("/logout")
+    public ModelAndView logoutFacebook(HttpServletRequest request) {
+        if (request.getSession().getAttribute(CURRENT_USER_FACEBOOK) != null || request.getSession().getAttribute(CURRENT_USER_INSTAGRAM) != null) {
             request.getSession().invalidate();
         }
-        return "redirect: /";
+        RedirectView redirectView = new RedirectView(request.getHeader("referer"), true, true, true);
+        return new ModelAndView(redirectView);
     }
 
 }
