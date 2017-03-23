@@ -41,16 +41,14 @@ public class MainController {
 
     @GetMapping(value = "/api/current-user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    List<Map<String, String>> getCurrentUser(final HttpServletRequest request) {
+    Map getCurrentUser(final HttpServletRequest request) {
         HttpSession currentSession = request.getSession();
-        List<Map<String, String>> currentUser = new ArrayList<Map<String, String>>();
+        Map currentUser;
         if (currentSession.getAttribute(CURRENT_USER_FACEBOOK) != null) {
-            currentUser.add((Map<String, String>) currentSession.getAttribute(CURRENT_USER_FACEBOOK));
-        }
-        if (currentSession.getAttribute(CURRENT_USER_INSTAGRAM) != null) {
-            currentUser.add((Map<String, String>) currentSession.getAttribute(CURRENT_USER_INSTAGRAM));
-        }
-        if (currentUser.isEmpty()) {
+            currentUser = (Map) currentSession.getAttribute(CURRENT_USER_FACEBOOK);
+        } else if (currentSession.getAttribute(CURRENT_USER_INSTAGRAM) != null) {
+            currentUser = (Map) currentSession.getAttribute(CURRENT_USER_INSTAGRAM);
+        } else {
             throw new NoCurrentUserException();
         }
         return currentUser;
