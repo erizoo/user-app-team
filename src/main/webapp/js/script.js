@@ -2,7 +2,7 @@ var ws;
 
 function connect() {
     var username = document.getElementById("username").value;
-    ws = new WebSocket("ws://" + document.location.host + "/chat-websocket-application/chat/" + username);
+    ws = new WebSocket("ws://user-app-team.herokuapp.com/api/chat/" + username);
 
 
     ws.onmessage = function(event) {
