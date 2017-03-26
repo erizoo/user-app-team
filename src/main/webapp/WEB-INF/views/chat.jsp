@@ -1,34 +1,80 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
-<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-<script src="${contextPath}/js/script.js"></script>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
+<head>
+    <title>Chat WebSocket</title>
+    <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+    <script src="${contextPath}/js/sockjs-0.3.4.js"></script>
+    <script src="${contextPath}/js/stomp.js"></script>
+    <script type="text/javascript">
+        var stompClient = null;
 
-        <table>
-            <tr>
-                <td colspan="2">
-                    <input type="text" id="username" placeholder="Username"/>
-                    <button type="button" onclick="connect();" >Connect</button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <textarea readonly="true" rows="10" cols="80" id="log"></textarea>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" size="15" id="to" placeholder="To"/>
-                    <input type="text" size="51" id="msg" placeholder="Message"/>
-                    <button type="button" onclick="send();" >Send</button>
-                </td>
-            </tr>
-        </table>
-    </body>
+        function setConnected(connected) {
+            document.getElementById('connect').disabled = connected;
+            document.getElementById('disconnect').disabled = !connected;
+            document.getElementById('conversationDiv').style.visibility
+                = connected ? 'visible' : 'hidden';
+            document.getElementById('response').innerHTML = '';
+        }
 
+        function connect() {
+            var socket = new SockJS('/chat');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function(frame) {
+                setConnected(true);
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/messages', function(messageOutput) {
+                    showMessageOutput(JSON.parse(messageOutput.body));
+                });
+            });
+        }
+
+        function disconnect() {
+            if(stompClient != null) {
+                stompClient.disconnect();
+            }
+            setConnected(false);
+            console.log("Disconnected");
+        }
+
+        function sendMessage() {
+            var from = document.getElementById('from').value;
+            var text = document.getElementById('text').value;
+            stompClient.send("/app/chat", {},
+                JSON.stringify({'from':from, 'text':text}));
+        }
+
+        function showMessageOutput(messageOutput) {
+            var response = document.getElementById('response');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(messageOutput.from + ": "
+                + messageOutput.text + " (" + messageOutput.time + ")"));
+            response.appendChild(p);
+        }
+    </script>
+</head>
+<body onload="disconnect()">
+<div>
+    <div>
+        <input type="text" id="from" placeholder="Choose a nickname"/>
+    </div>
+    <br />
+    <div>
+        <button id="connect" onclick="connect();">Connect</button>
+        <button id="disconnect" disabled="disabled" onclick="disconnect();">
+            Disconnect
+        </button>
+    </div>
+    <br />
+    <div id="conversationDiv">
+        <input type="text" id="text" placeholder="Write a message..."/>
+        <button id="sendMessage" onclick="sendMessage();">Send</button>
+        <p id="response"></p>
+    </div>
+</div>
+
+</body>
+</html>
 
 
 </html>

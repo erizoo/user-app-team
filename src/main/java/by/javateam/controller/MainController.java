@@ -29,8 +29,13 @@ public class MainController {
      *
      * @return login jsp page
      */
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping("/")
     public String startPage(){
+        return "index";
+    }
+
+    @GetMapping("/api/chat")
+    public String chatPage(){
         return "index";
     }
 
