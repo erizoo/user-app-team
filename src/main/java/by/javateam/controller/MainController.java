@@ -36,7 +36,7 @@ public class MainController {
 
     @GetMapping("/api/chat")
     public String chatPage(){
-        return "index";
+        return "chat";
     }
 
     @RequestMapping(value = "/error", method = RequestMethod.GET)

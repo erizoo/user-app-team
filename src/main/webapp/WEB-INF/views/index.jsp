@@ -1,36 +1,40 @@
+<%@page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Main page
+    </title>
+</head>
 <body>
-<div id="container">
-    <div id="loginPanel">
-        <div id="infoLabel">Type a name to join the room</div>
-        <div style="padding: 10px;">
-            <input id="txtLogin" type="text" class="loginInput"
-                   onkeyup="proxy.login_keyup(event)" />
-            <button type="button" class="loginInput" onclick="proxy.login()">Login</button>
-        </div>
-    </div>
-    <script> var proxy = CreateProxy(wsUri);
 
-    document.addEventListener("DOMContentLoaded", function(event) {
-        console.log(document.getElementById('loginPanel'));
-        proxy.initiate({
-            loginPanel: document.getElementById('loginPanel'),
-            msgPanel: document.getElementById('msgPanel'),
-            txtMsg: document.getElementById('txtMsg'),
-            txtLogin: document.getElementById('txtLogin'),
-            msgContainer: document.getElementById('msgContainer')
-        });
-    });</script>
-
-    <div id="msgPanel" style="display: none">
-        <div id="msgContainer" style="overflow: auto;"></div>
-        <div id="msgController">
-            <textarea id="txtMsg"
-                      title="Enter to send message"
-                      onkeyup="proxy.sendMessage_keyup(event)"
-                      style="height: 20px; width: 100%"></textarea>
-            <button style="height: 30px; width: 100px" type="button"
-                    onclick="proxy.logout()">Logout</button>
-        </div>
-    </div>
+<h1>Main page</h1>
+<div>
+    Hello. click link bellow to see full users list:
+    <a href="<c:url value='/api/users'/>">Click me</a><br>
+</div>
+<div>
+    To login with Facebook click link below:
+    <a href="<c:url value='api/login/facebook'/>">Login</a>
+</div>
+<div>
+    To logout with Facebook click link below:
+    <a href="<c:url value='api/logout/facebook'/>">Logout</a>
+</div>
+<div>
+    To login with Instagram click link below:
+    <a href="<c:url value='api/login/instagram'/>">Login</a>
+</div>
+<div>
+    To logout with Instagram click link below:
+    <a href="<c:url value='api/logout/instagram'/>">Logout</a>
+</div>
+<br>
+<div>
+    To check current Instagram user use link below:
+    <a href="<c:url value='api/current-user'/>">Checking</a>
 </div>
 </body>
+</html>
