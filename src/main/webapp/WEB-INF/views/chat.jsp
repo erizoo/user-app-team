@@ -5,6 +5,8 @@
     <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
     <script src="${contextPath}/js/sockjs-0.3.4.js"></script>
     <script src="${contextPath}/js/stomp.js"></script>
+    <link rel="stylesheet" href="${contextPath}/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${contextPath}/css/bootstrap-social.css"/>
     <script type="text/javascript">
         var stompClient = null;
 
@@ -54,23 +56,27 @@
     </script>
 </head>
 <body onload="disconnect()">
-<div>
-    <div>
-        <input type="text" id="from" placeholder="Choose a nickname"/>
+<div class="container" style="align-content: center"><br />
+    <div class="form-group row">
+        <div class="col-sm-3">
+        <input class="form-control" type="text" id="from" placeholder="Choose a nickname"/>
+        </div>
     </div>
-    <br />
     <div>
-        <button id="connect" onclick="connect();">Connect</button>
-        <button id="disconnect" disabled="disabled" onclick="disconnect();">
+        <button class="btn btn-success" id="connect" onclick="connect();">Connect</button>
+        <button class="btn btn-warning" id="disconnect" disabled="disabled" onclick="disconnect();">
             Disconnect
         </button>
     </div>
     <br />
-    <div id="conversationDiv">
-        <input type="text" id="text" placeholder="Write a message..."/>
-        <button id="sendMessage" onclick="sendMessage();">Send</button>
-        <p id="response"></p>
-    </div>
+    <div class="input-group" id="conversationDiv">
+        <input class="form-control" type="text" id="text" placeholder="Write a message..."/>
+        <span class="input-group-btn">
+        <button class="btn btn-info" id="sendMessage" onclick="sendMessage();"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Send</button>
+        </span>
+    </div> <br>
+        <p class="lead" id="response"></p>
+
 </div>
 
 </body>
