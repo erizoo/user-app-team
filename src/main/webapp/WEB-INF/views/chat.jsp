@@ -5,6 +5,7 @@
     <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
     <script src="${contextPath}/js/sockjs-0.3.4.js"></script>
     <script src="${contextPath}/js/stomp.js"></script>
+    <script src="${contextPath}/js/jquery-3.2.0.min.js"></script>
     <link rel="stylesheet" href="${contextPath}/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${contextPath}/css/bootstrap-social.css"/>
     <script type="text/javascript">
@@ -43,6 +44,7 @@
             var text = document.getElementById('text').value;
             stompClient.send("/app/chat", {},
                 JSON.stringify({'from':from, 'text':text}));
+            $('#text').val('');
         }
 
         function showMessageOutput(messageOutput) {
