@@ -72,7 +72,8 @@
     </div>
     <br />
     <div class="input-group" id="conversationDiv">
-        <input class="form-control" type="text" id="text" placeholder="Write a message..."/>
+        <input class="form-control" type="text" id="text" placeholder="Write a message..."
+               onkeydown="if (event.keyCode == 13){document.getElementById('sendMessage').click(); return false;}"/>
         <span class="input-group-btn">
         <button class="btn btn-info" id="sendMessage" onclick="sendMessage();"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Send</button>
         </span>
