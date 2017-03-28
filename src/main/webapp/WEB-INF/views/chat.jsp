@@ -77,6 +77,12 @@
                 return false;
             }
         }
+        function onKeyDownHandlerConnect(event) {
+            if (event.keyCode == 13){
+                document.getElementById('connect').click();
+                return false;
+            }
+        }
     </script>
 
 </head>
@@ -84,7 +90,7 @@
 <div class="container" style="align-content: center"><br />
     <div class="form-group row">
         <div class="col-sm-3">
-        <input class="form-control" type="text" id="from" placeholder="Choose a nickname"/>
+        <input class="form-control" type="text" id="from" placeholder="Choose a nickname" onkeydown="onKeyDownHandlerConnect(event)"/>
         </div>
     </div>
     <div>
