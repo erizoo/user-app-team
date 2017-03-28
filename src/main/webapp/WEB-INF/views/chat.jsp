@@ -6,9 +6,20 @@
     <script src="${contextPath}/js/sockjs-0.3.4.js"></script>
     <script src="${contextPath}/js/stomp.js"></script>
     <script src="${contextPath}/js/jquery-3.2.0.min.js"></script>
+    <script src="${contextPath}/js/ion.sound.js"></script>
     <link rel="stylesheet" href="${contextPath}/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${contextPath}/css/bootstrap-social.css"/>
     <script type="text/javascript">
+        ion.sound({
+            sounds: [
+                {
+                    name: "beer_can_opening"
+                }
+            ],
+            volume: 0.5,
+            path: "${contextPath}/js/sounds",
+            preload: true
+        });
         var stompClient = null;
 
         function setConnected(connected) {
@@ -54,8 +65,11 @@
             p.appendChild(document.createTextNode(messageOutput.from + ": "
                 + messageOutput.text + " (" + messageOutput.time + ")"));
             response.appendChild(p);
+            ion.sound.play("beer_can_opening");
         }
+
     </script>
+
 </head>
 <body onload="disconnect()">
 <div class="container" style="align-content: center"><br />
