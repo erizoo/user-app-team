@@ -6,22 +6,13 @@
     <script src="${contextPath}/js/sockjs-0.3.4.js"></script>
     <script src="${contextPath}/js/stomp.js"></script>
     <script src="${contextPath}/js/jquery-3.2.0.min.js"></script>
-    <script src="${contextPath}/js/ion.sound.js"></script>
     <link rel="stylesheet" href="${contextPath}/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${contextPath}/css/bootstrap-social.css"/>
     <script type="text/javascript">
-        ion.sound({
-            sounds: [
-                {
-                    name: "beer_can_opening"
-                }
-            ],
-            volume: 0.5,
-            path: "${contextPath}/js/sounds",
-            preload: true
-        });
         var stompClient = null;
-
+        $('<embed  id="chatAudio"><source src="notify.ogg" type="audio/ogg">' +
+            '<source src="notify.mp3" type="audio/mpeg"><source src="notify.wav" type="audio/wav"></embed >')
+            .appendTo('body');
         function setConnected(connected) {
             document.getElementById('connect').disabled = connected;
             document.getElementById('disconnect').disabled = !connected;
@@ -59,15 +50,26 @@
         }
 
         function showMessageOutput(messageOutput) {
+            var audioElement = document.createElement('audio');
+            audioElement.setAttribute('src', 'http://www.soundjay.com/button/sounds/button-35.mp3');
             var response = document.getElementById('response');
             var p = document.createElement('p');
             p.style.wordWrap = 'break-word';
             p.appendChild(document.createTextNode(messageOutput.from + ": "
                 + messageOutput.text + " (" + messageOutput.time + ")"));
             response.appendChild(p);
-            ion.sound.play("beer_can_opening");
+            audioElement.play();
         }
 
+//        $(document).ready(function() {
+//            var audioElement = document.createElement('audio');
+//            audioElement.setAttribute('src', 'http://www.soundjay.com/button/sounds/button-35.mp3');
+//
+//            audioElement.addEventListener('ended', function() {
+//                this.play();
+//            }, false);
+//
+//        });
     </script>
 
 </head>
@@ -100,4 +102,4 @@
 </html>
 
 
-</html>
+
