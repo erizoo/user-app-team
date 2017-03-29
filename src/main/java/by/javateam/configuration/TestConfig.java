@@ -15,20 +15,17 @@ import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.Properties;
 
-/**
- * Configurer for database and mail.
- *
- * Created by valera.
- */
 @Configuration
 @EnableTransactionManagement
 @PropertySource(value = {"classpath:hibernate.properties",
         "classpath:data-base.properties",
         "classpath:email.properties",
         "classpath:social.properties"})
-@ComponentScan( basePackages ={"by.javateam.*"})
-public class ApplicationConfig {
+@ComponentScan( basePackages ={"by.javateam.*"},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Configuration.class)})
 
+public class TestConfig {
 
     private Environment environment;
 
@@ -37,7 +34,7 @@ public class ApplicationConfig {
      * @param environment
      */
     @Autowired
-    public ApplicationConfig(Environment environment) {
+    public TestConfig(Environment environment) {
         this.environment = environment;
     }
 

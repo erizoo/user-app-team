@@ -51,6 +51,7 @@ public class SocialController {
     private ConnectionFactoryRegistry connectionFactoryRegistry;
     private OAuth2Parameters oAuth2Parameters;
     private SocialService socialService;
+
     @Autowired
     public SocialController(final Environment environment,
                             final ConnectionFactoryRegistry connectionFactoryRegistry,
