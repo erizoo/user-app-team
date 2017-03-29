@@ -10,13 +10,19 @@
     <link rel="stylesheet" href="${contextPath}/css/bootstrap-social.css"/>
     <script type="text/javascript">
         var stompClient = null;
-
+        var connectedUser = null;
+        $('<embed  id="chatAudio"><source src="notify.ogg" type="audio/ogg">' +
+            '<source src="notify.mp3" type="audio/mpeg"><source src="notify.wav" type="audio/wav"></embed >')
+            .appendTo('body');
         function setConnected(connected) {
             document.getElementById('connect').disabled = connected;
             document.getElementById('disconnect').disabled = !connected;
             document.getElementById('conversationDiv').style.visibility
                 = connected ? 'visible' : 'hidden';
             document.getElementById('response').innerHTML = '';
+            var from = document.getElementById('from').value;
+
+
         }
 
         function connect() {
@@ -28,11 +34,18 @@
                 stompClient.subscribe('/topic/messages', function(messageOutput) {
                     showMessageOutput(JSON.parse(messageOutput.body));
                 });
+                connectedUser = document.getElementById('from').value;
+                var text = "JOINED TO CHAT";
+                stompClient.send("/app/chat", {},
+                    JSON.stringify({'from':connectedUser, 'text':text}));
             });
         }
 
         function disconnect() {
             if(stompClient != null) {
+                var text = "LEFT THE CHAT";
+                stompClient.send("/app/chat", {},
+                    JSON.stringify({'from':connectedUser, 'text':text}));
                 stompClient.disconnect();
             }
             setConnected(false);
@@ -48,20 +61,36 @@
         }
 
         function showMessageOutput(messageOutput) {
+            var audioElement = document.createElement('audio');
+            audioElement.setAttribute('src', 'http://www.soundjay.com/button/sounds/button-35.mp3');
             var response = document.getElementById('response');
             var p = document.createElement('p');
             p.style.wordWrap = 'break-word';
             p.appendChild(document.createTextNode(messageOutput.from + ": "
                 + messageOutput.text + " (" + messageOutput.time + ")"));
-            response.appendChild(p);
+            response.prepend(p);
+            audioElement.play();
+        }
+        function onKeyDownHandler(event) {
+            if (event.keyCode == 13){
+                document.getElementById('sendMessage').click();
+                return false;
+            }
+        }
+        function onKeyDownHandlerConnect(event) {
+            if (event.keyCode == 13){
+                document.getElementById('connect').click();
+                return false;
+            }
         }
     </script>
+
 </head>
 <body onload="disconnect()">
 <div class="container" style="align-content: center"><br />
     <div class="form-group row">
         <div class="col-sm-3">
-        <input class="form-control" type="text" id="from" placeholder="Choose a nickname"/>
+        <input class="form-control" type="text" id="from" placeholder="Choose a nickname" onkeydown="onKeyDownHandlerConnect(event)"/>
         </div>
     </div>
     <div>
@@ -72,7 +101,9 @@
     </div>
     <br />
     <div class="input-group" id="conversationDiv">
-        <input class="form-control" type="text" id="text" placeholder="Write a message..."/>
+        <input class="form-control" type="text" id="text" placeholder="Write a message..."
+               onkeydown="onKeyDownHandler(event)"/>
+
         <span class="input-group-btn">
         <button class="btn btn-info" id="sendMessage" onclick="sendMessage();"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Send</button>
         </span>
@@ -85,4 +116,4 @@
 </html>
 
 
-</html>
+
