@@ -24,7 +24,7 @@ public class EmailDaoImpl implements EmailDao {
 
     @Override
     public void save(Email email) {
-        sessionFactory.getCurrentSession().saveOrUpdate(email);
+        sessionFactory.getCurrentSession().save(email);
     }
 
     @Override

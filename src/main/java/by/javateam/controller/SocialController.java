@@ -13,7 +13,6 @@ import org.jinstagram.auth.model.Verifier;
 import org.jinstagram.auth.oauth.InstagramService;
 import org.jinstagram.entity.users.basicinfo.UserInfo;
 import org.jinstagram.exceptions.InstagramException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,16 +51,16 @@ public class SocialController {
     private OAuth2Parameters oAuth2Parameters;
     private SocialService socialService;
 
-    @Autowired
-    public SocialController(final Environment environment,
-                            final ConnectionFactoryRegistry connectionFactoryRegistry,
-                            final OAuth2Parameters oAuth2Parameters,
-                            final SocialService socialService) {
-        this.environment = environment;
-        this.connectionFactoryRegistry = connectionFactoryRegistry;
-        this.oAuth2Parameters = oAuth2Parameters;
-        this.socialService = socialService;
-    }
+//    @Autowired
+//    public SocialController(final Environment environment,
+//                            final ConnectionFactoryRegistry connectionFactoryRegistry,
+//                            final OAuth2Parameters oAuth2Parameters,
+//                            final SocialService socialService) {
+//        this.environment = environment;
+//        this.connectionFactoryRegistry = connectionFactoryRegistry;
+//        this.oAuth2Parameters = oAuth2Parameters;
+//        this.socialService = socialService;
+//    }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginPage() {
