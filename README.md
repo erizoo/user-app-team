@@ -23,7 +23,7 @@ project will be available on http://localhost:8080/
 
 ## Preview
 
-https://valera-user-app.herokuapp.com/api/users
+https://user-app-team.herokuapp.com/
 
 ## Specification
 
