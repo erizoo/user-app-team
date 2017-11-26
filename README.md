@@ -21,9 +21,6 @@ To start a project use:
 
 project will be available on http://localhost:8080/
 
-## Preview
-https://serene-wave-27221.herokuapp.com - front-end
-https://user-app-team.herokuapp.com/ - back-end
 
 ## Specification
 
